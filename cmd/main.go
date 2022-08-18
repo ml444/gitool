@@ -23,10 +23,10 @@ func main() {
 		log.Errorf("err:%v", err)
 		return
 	}
-	//_, err = gitlab.ListProjects4AllGroups()
-	//if err != nil {
-	//	log.Errorf("err:%v", err)
-	//	return
-	//}
+	_, err = gitlab.ListProjects4AllGroups()
+	if err != nil {
+		log.Errorf("err:%v", err)
+		return
+	}
 	//gitlab.ListAllProjects()
 }

@@ -13,7 +13,7 @@ func CloneProject(project *gitlab.Project) {
 	var err error
 	_, err = git.PlainClone(conf.Get(conf.GitlabLocalBaseDir)+"/"+project.PathWithNamespace, false, &git.CloneOptions{
 		Auth: &http.BasicAuth{
-			Username: conf.GitlabUsername,
+			Username: conf.Get(conf.GitlabUsername),
 			Password: conf.Get(conf.GitlabAccessToken),
 		},
 		URL:      project.SSHURLToRepo,

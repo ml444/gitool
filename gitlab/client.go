@@ -9,7 +9,7 @@ import (
 var Cli *gitlab.Client
 
 func InitClient() error {
-	cli, err := gitlab.NewClient(conf.Get(conf.GitlabAccessToken), gitlab.WithBaseURL(conf.GitlabBaseUrl))
+	cli, err := gitlab.NewClient(conf.Get(conf.GitlabAccessToken), gitlab.WithBaseURL(conf.Get(conf.GitlabBaseUrl)))
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
