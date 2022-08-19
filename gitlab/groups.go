@@ -2,7 +2,6 @@ package gitlab
 
 import (
 	"fmt"
-	"github.com/ml444/gitool/git"
 	log "github.com/ml444/glog"
 	"github.com/xanzy/go-gitlab"
 	"os"
@@ -34,23 +33,23 @@ func GetAllGroups() ([]*gitlab.Group, error) {
 	return groupList, nil
 }
 
-func ListProjects4AllGroups() (interface{}, error) {
+func IterProjects4AllGroups(projCh chan *gitlab.Project) error {
 	allGroups, err := GetAllGroups()
 	if err != nil {
 		log.Errorf("err:%v", err)
-		return nil, err
+		return err
 	}
 	for _, group := range allGroups {
-		err = ListProjectsByGroup(group.ID)
+		err = ListProjectsByGroup(group.ID, projCh)
 		if err != nil {
 			log.Errorf("err:%v", err)
-			return nil, err
+			return err
 		}
 	}
-	return nil, nil
+	return nil
 }
 
-func ListProjectsByGroup(groupId int) error {
+func ListProjectsByGroup(groupId int, projCh chan *gitlab.Project) error {
 	var nextPage int
 	for {
 		opt := &gitlab.ListGroupProjectsOptions{
@@ -74,21 +73,13 @@ func ListProjectsByGroup(groupId int) error {
 			os.Exit(0)
 		}
 		for _, project := range projects {
+			projCh <- project
 			fmt.Println(project.SSHURLToRepo)
-			git.CloneProject(project)
 		}
 		if rsp.CurrentPage == rsp.TotalPages {
 			break
 		}
 		nextPage = rsp.CurrentPage + 1
 	}
-
-	//l := list.NewWriter()
-	//for _, project := range projects {
-	//	l.AppendItem(project.Name)
-	//}
-	//l.SetStyle(list.StyleBulletCircle)
-	//fmt.Println("\n")
-	//consoleLog("List all your projects", l.Render(), "")
 	return nil
 }
