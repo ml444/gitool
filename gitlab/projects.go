@@ -2,8 +2,10 @@ package gitlab
 
 import (
 	"fmt"
-	"github.com/xanzy/go-gitlab"
 	"os"
+
+	"github.com/ml444/glog"
+	"github.com/xanzy/go-gitlab"
 )
 
 func ListAllProjects() {
@@ -32,4 +34,46 @@ func ListAllProjects() {
 	//l.SetStyle(list.StyleBulletCircle)
 	//fmt.Println("\n")
 	//consoleLog("List all your projects", l.Render(), "")
+}
+
+func GetProject(pid int) (*gitlab.Project, error) {
+	opt := gitlab.GetProjectOptions{}
+	project, _, err := Cli.Projects.GetProject(pid, &opt)
+	if err != nil {
+		log.Error(err.Error())
+		return nil, err
+	}
+	return project, nil
+}
+
+func SearchProjectsByName(name string) ([]*gitlab.Project, error) {
+	opt := gitlab.ListProjectsOptions{
+		ListOptions:              gitlab.ListOptions{},
+		Archived:                 nil,
+		IDAfter:                  nil,
+		IDBefore:                 nil,
+		LastActivityAfter:        nil,
+		LastActivityBefore:       nil,
+		Membership:               nil,
+		MinAccessLevel:           nil,
+		OrderBy:                  nil,
+		Owned:                    nil,
+		RepositoryChecksumFailed: nil,
+		RepositoryStorage:        nil,
+		Search:                   &name,
+		SearchNamespaces:         nil,
+		Simple:                   nil,
+		Sort:                     nil,
+		Starred:                  nil,
+		Statistics:               nil,
+		Topic:                    nil,
+		Visibility:               nil,
+	}
+	projects, _, err := Cli.Projects.ListProjects(&opt)
+	if err != nil {
+		log.Errorf("err:%v", err)
+		return nil, err
+	}
+	//fmt.Println(rsp)
+	return projects, nil
 }

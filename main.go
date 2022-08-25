@@ -14,7 +14,9 @@ import (
 func main() {
 	var err error
 	var cmdStr string
-	gn := flag.Int("gn", 1, "concurrent number")
+	gn := flag.Int("C", 1, "goroutine concurrent count")
+	search := flag.String("s", "", "search repo name")
+	all := flag.Bool("all", false, "operate all repo")
 	if argsLen := len(os.Args); argsLen == 1 {
 		flag.Usage()
 		return
@@ -37,9 +39,15 @@ func main() {
 	}
 	switch cmdStr {
 	case "clone":
-		fmt.Println("running clone all repo")
-		fmt.Println("===>", *gn)
-		cmd.CloneAllRepo(*gn)
+		if *all {
+			fmt.Println("running clone all repo")
+			fmt.Println("===>", *gn)
+			cmd.CloneAllRepo(*gn)
+		} else if *search != "" {
+			cmd.SearchRepo(*search)
+		} else {
+			cmd.DefaultSelectOption()
+		}
 	default:
 		flag.Usage()
 	}
