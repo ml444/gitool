@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/ml444/gitool/cmd"
 	"github.com/ml444/gitool/conf"
@@ -14,11 +15,24 @@ import (
 func main() {
 	var err error
 	var cmdStr string
+	var domain int
 	gn := flag.Int("C", 1, "goroutine concurrent count")
-	search := flag.String("s", "", "search repo name")
+	tPtr := flag.Int("T", 0, "<DomainType: 1-github,2-gitlab>")
 	all := flag.Bool("all", false, "operate all repo")
+	search := flag.String("s", "", "search repo name")
+	domain = *tPtr
+	if domain == 0 {
+		switch strings.ToLower(conf.GetOrDefault(conf.GitDefaultDomain, "gitlab")) {
+		case "github":
+			domain = conf.GitDomainGithub
+		case "gitlab":
+			domain = conf.GitDomainGitlab
+		}
+
+	}
 	if argsLen := len(os.Args); argsLen == 1 {
-		flag.Usage()
+		fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s <cmd:clone|pull> [options]:\n", os.Args[0])
+		flag.PrintDefaults()
 		return
 	} else {
 		cmdStr = os.Args[1]
@@ -42,11 +56,19 @@ func main() {
 		if *all {
 			fmt.Println("running clone all repo")
 			fmt.Println("===>", *gn)
-			cmd.CloneAllRepo(*gn)
+			cmd.CloneAllRepo(domain, *gn)
 		} else if *search != "" {
-			cmd.SearchRepo(*search)
+			cmd.CloneOneRepoBySearch(domain, *search)
 		} else {
-			cmd.DefaultSelectOption()
+			cmd.DefaultSelectOption(domain)
+		}
+	case "pull":
+		if *all {
+			cmd.PullAllRepo(domain, *gn)
+		} else if *search != "" {
+			cmd.PullOneRepoBySearch(domain, *search)
+		} else {
+			cmd.PullDefaultSelectOption(domain)
 		}
 	default:
 		flag.Usage()

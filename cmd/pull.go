@@ -12,25 +12,25 @@ import (
 	log "github.com/ml444/glog"
 )
 
-func CloneOneRepoBySearch(domain int, searchContent string) {
+func PullOneRepoBySearch(domain int, searchContent string) {
 	switch domain {
 	case conf.GitDomainGithub:
 		// Pass
 	case conf.GitDomainGitlab:
-		gitlab.CloneRepoBySearch(searchContent)
+		gitlab.PullOneRepoBySearch(searchContent)
 	}
 }
 
-func CloneAllRepo(domain int, gn int) {
+func PullAllRepo(domain int, gn int) {
 	switch domain {
 	case conf.GitDomainGithub:
 		// Pass
 	case conf.GitDomainGitlab:
-		gitlab.CloneAllRepo(gn)
+		gitlab.PullAllRepo(gn)
 	}
 }
 
-func DefaultSelectOption(gitDomain int) {
+func PullDefaultSelectOption(gitDomain int) {
 	prompt := promptui.Select{
 		Label: "Select repo",
 		Items: []string{"cloneAllRepo", "searchAndSelectRepo", "exit"},
@@ -64,7 +64,7 @@ func DefaultSelectOption(gitDomain int) {
 		case conf.GitDomainGithub:
 			// pass
 		case conf.GitDomainGitlab:
-			gitlab.CloneAllRepo(int(goroutineCount))
+			gitlab.PullAllRepo(int(goroutineCount))
 		}
 	case "searchAndSelectRepo":
 		prompt := promptui.Prompt{
@@ -85,7 +85,7 @@ func DefaultSelectOption(gitDomain int) {
 		case conf.GitDomainGithub:
 			// pass
 		case conf.GitDomainGitlab:
-			gitlab.CloneRepoBySearch(v)
+			gitlab.PullOneRepoBySearch(v)
 		}
 	default:
 		os.Exit(0)

@@ -14,6 +14,14 @@ import (
 //	}
 //}
 
+func GetOrDefault(key string, def string) string {
+	v, ok := Config[key]
+	if ok {
+		return v
+	}
+	return def
+}
+
 func Get(key string) string {
 	v, ok := Config[key]
 	if ok {
