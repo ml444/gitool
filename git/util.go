@@ -40,7 +40,7 @@ func GetRepoPathByHTTPSURL(HTTPSURL string) (string, error) {
 	sList = append(sList, list...)
 	return filepath.Join(sList...), nil
 }
-func getRepoLocalPath(httpsUrl string) (string, error) {
+func GetRepoLocalPath(httpsUrl string) (string, error) {
 	dir, err := GetRepoPathByHTTPSURL(httpsUrl)
 	if err != nil {
 		return "", err

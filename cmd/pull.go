@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/manifoldco/promptui"
 	"github.com/ml444/gitool/conf"
@@ -33,7 +34,7 @@ func PullAllRepo(domain int, gn int) {
 func PullDefaultSelectOption(gitDomain int) {
 	prompt := promptui.Select{
 		Label: "Select repo",
-		Items: []string{"cloneAllRepo", "searchAndSelectRepo", "exit"},
+		Items: []string{"PullAllRepo", "SearchAndSelectRepo", "exit"},
 	}
 
 	_, result, err := prompt.Run()
@@ -42,7 +43,7 @@ func PullDefaultSelectOption(gitDomain int) {
 		return
 	}
 	switch result {
-	case "cloneAllRepo":
+	case "PullAllRepo":
 		var goroutineCount int64
 		prompt := promptui.Prompt{
 			Label: "How much concurrency do you want <int>",
@@ -66,7 +67,7 @@ func PullDefaultSelectOption(gitDomain int) {
 		case conf.GitDomainGitlab:
 			gitlab.PullAllRepo(int(goroutineCount))
 		}
-	case "searchAndSelectRepo":
+	case "SearchAndSelectRepo":
 		prompt := promptui.Prompt{
 			Label: "Input repo name",
 			Validate: func(s string) error {
@@ -90,4 +91,5 @@ func PullDefaultSelectOption(gitDomain int) {
 	default:
 		os.Exit(0)
 	}
+	time.Sleep(time.Second)
 }

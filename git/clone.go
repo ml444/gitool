@@ -12,7 +12,7 @@ import (
 
 func CloneOneProject(project *gitlab.Project) {
 	var err error
-	repoPath, err := getRepoLocalPath(project.HTTPURLToRepo)
+	repoPath, err := GetRepoLocalPath(project.HTTPURLToRepo)
 	if err != nil {
 		log.Error(err)
 		return

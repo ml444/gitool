@@ -12,12 +12,12 @@ func PullOneRepo(dir string) error {
 	if err != nil {
 		return err
 	}
-	out, err := exec.Command("git pull").Output()
+	out, err := exec.Command("git", "pull").Output()
 	if err != nil {
 		return err
 	}
 	if len(out) != 0 {
-		log.Info(out)
+		log.Info(string(out))
 	}
 	return nil
 }

@@ -2,7 +2,6 @@ package gitlab
 
 import (
 	"context"
-
 	"github.com/manifoldco/promptui"
 	"github.com/ml444/gitool/git"
 	log "github.com/ml444/glog"
@@ -54,7 +53,8 @@ func PullOneRepoBySearch(repoName string) {
 		project = projectMap[result]
 	}
 PULL:
-	dir, err := git.GetRepoPathByHTTPSURL(project.HTTPURLToRepo)
+	//dir, err := git.GetRepoPathByHTTPSURL(project.HTTPURLToRepo)
+	dir, err := git.GetRepoLocalPath(project.HTTPURLToRepo)
 	if err != nil {
 		log.Error(err)
 		return
