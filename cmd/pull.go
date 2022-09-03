@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/manifoldco/promptui"
 	"github.com/ml444/gitool/conf"
@@ -12,28 +13,28 @@ import (
 	log "github.com/ml444/glog"
 )
 
-func CloneOneRepoBySearch(domain int, searchContent string) {
+func PullOneRepoBySearch(domain int, searchContent string) {
 	switch domain {
 	case conf.GitDomainGithub:
 		// Pass
 	case conf.GitDomainGitlab:
-		gitlab.CloneRepoBySearch(searchContent)
+		gitlab.PullOneRepoBySearch(searchContent)
 	}
 }
 
-func CloneAllRepo(domain int, gn int) {
+func PullAllRepo(domain int, gn int) {
 	switch domain {
 	case conf.GitDomainGithub:
 		// Pass
 	case conf.GitDomainGitlab:
-		gitlab.CloneAllRepo(gn)
+		gitlab.PullAllRepo(gn)
 	}
 }
 
-func CloneDefaultSelectOption(gitDomain int) {
+func PullDefaultSelectOption(gitDomain int) {
 	prompt := promptui.Select{
 		Label: "Select repo",
-		Items: []string{"cloneAllRepo", "searchAndSelectRepo", "exit"},
+		Items: []string{"PullAllRepo", "SearchAndSelectRepo", "exit"},
 	}
 
 	_, result, err := prompt.Run()
@@ -42,14 +43,11 @@ func CloneDefaultSelectOption(gitDomain int) {
 		return
 	}
 	switch result {
-	case "cloneAllRepo":
+	case "PullAllRepo":
 		var goroutineCount int64
 		prompt := promptui.Prompt{
 			Label: "How much concurrency do you want <int>",
 			Validate: func(s string) error {
-				if s == "" {
-					return nil
-				}
 				goroutineCount, err = strconv.ParseInt(s, 10, 64)
 				if err != nil {
 					log.Errorf("err:%v", err)
@@ -67,9 +65,9 @@ func CloneDefaultSelectOption(gitDomain int) {
 		case conf.GitDomainGithub:
 			// pass
 		case conf.GitDomainGitlab:
-			gitlab.CloneAllRepo(int(goroutineCount))
+			gitlab.PullAllRepo(int(goroutineCount))
 		}
-	case "searchAndSelectRepo":
+	case "SearchAndSelectRepo":
 		prompt := promptui.Prompt{
 			Label: "Input repo name",
 			Validate: func(s string) error {
@@ -88,9 +86,10 @@ func CloneDefaultSelectOption(gitDomain int) {
 		case conf.GitDomainGithub:
 			// pass
 		case conf.GitDomainGitlab:
-			gitlab.CloneRepoBySearch(v)
+			gitlab.PullOneRepoBySearch(v)
 		}
 	default:
 		os.Exit(0)
 	}
+	time.Sleep(time.Second)
 }

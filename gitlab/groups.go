@@ -35,7 +35,10 @@ func GetAllGroups() ([]*gitlab.Group, error) {
 	return groupList, nil
 }
 
-func IterProjects4AllGroups(projCh chan *gitlab.Project) error {
+func IterProjects4AllGroups(projCh *chan *gitlab.Project, isDone *bool) error {
+	defer func() {
+		*isDone = true
+	}()
 	allGroups, err := GetAllGroups()
 	log.Info("===> Iter projects from all groups")
 	if err != nil {
@@ -52,7 +55,7 @@ func IterProjects4AllGroups(projCh chan *gitlab.Project) error {
 	return nil
 }
 
-func ListProjectsByGroup(groupId int, projCh chan *gitlab.Project) error {
+func ListProjectsByGroup(groupId int, projCh *chan *gitlab.Project) error {
 	var nextPage int
 	for {
 		opt := &gitlab.ListGroupProjectsOptions{
@@ -76,7 +79,7 @@ func ListProjectsByGroup(groupId int, projCh chan *gitlab.Project) error {
 			os.Exit(0)
 		}
 		for _, project := range projects {
-			projCh <- project
+			*projCh <- project
 			fmt.Println(project.SSHURLToRepo)
 		}
 		if rsp.CurrentPage == rsp.TotalPages {
