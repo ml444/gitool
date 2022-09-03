@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/manifoldco/promptui v0.9.0
-	github.com/ml444/glog v0.0.0-20220819095420-f25ba714c43d
+	github.com/ml444/glog v0.0.0-20220902194351-bf3cc2edf580
 	github.com/xanzy/go-gitlab v0.72.0
 	gopkg.in/src-d/go-git.v4 v4.13.1
 )

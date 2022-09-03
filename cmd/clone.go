@@ -4,13 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
+	"strconv"
+
 	"github.com/manifoldco/promptui"
 	"github.com/ml444/gitool/git"
 	gl "github.com/ml444/gitool/gitlab"
 	log "github.com/ml444/glog"
 	"github.com/xanzy/go-gitlab"
-	"os"
-	"strconv"
 )
 
 func CloneOneRepo(groupName string, repoName string) {
