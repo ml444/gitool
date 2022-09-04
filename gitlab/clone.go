@@ -3,6 +3,7 @@ package gitlab
 import (
 	"context"
 	"fmt"
+	"sync"
 
 	"github.com/manifoldco/promptui"
 	"github.com/ml444/gitool/git"
@@ -19,9 +20,11 @@ func CloneAllRepo(gn int) {
 		log.Errorf("err:%v", err)
 		return
 	}
+	var wg sync.WaitGroup
 	for i := 0; i < gn; i++ {
-		git.CloneProjects(ctx, projCh)
+		go git.CloneProjects(ctx, &wg, projCh)
 	}
+	wg.Wait()
 }
 
 func CloneRepoBySearch(search string) {

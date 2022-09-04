@@ -53,9 +53,9 @@ func main() {
 	}
 	switch cmdStr {
 	case "clone":
+		log.Info("readying clone")
 		if *all {
-			fmt.Println("running clone all repo")
-			fmt.Println("===>", *gn)
+			log.Infof("running clone all repo, concurrent number: %d", *gn)
 			cmd.CloneAllRepo(domain, *gn)
 		} else if *search != "" {
 			cmd.CloneOneRepoBySearch(domain, *search)
@@ -63,7 +63,9 @@ func main() {
 			cmd.DefaultSelectOption(domain)
 		}
 	case "pull":
+		log.Info("readying pull")
 		if *all {
+			log.Infof("running pull all repo, concurrent number: %d", *gn)
 			cmd.PullAllRepo(domain, *gn)
 		} else if *search != "" {
 			cmd.PullOneRepoBySearch(domain, *search)
@@ -74,10 +76,6 @@ func main() {
 		flag.Usage()
 	}
 
-	//_, err = gitlab.ListProjects4AllGroups()
-	//if err != nil {
-	//	log.Errorf("err:%v", err)
-	//	return
-	//}
-
+	log.Info("process complete")
 }
+	

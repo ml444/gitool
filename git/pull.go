@@ -1,9 +1,13 @@
 package git
 
 import (
-	log "github.com/ml444/glog"
+	"context"
 	"os"
 	"os/exec"
+	"sync"
+
+	log "github.com/ml444/glog"
+	"github.com/xanzy/go-gitlab"
 )
 
 func PullOneRepo(dir string) error {
@@ -20,4 +24,23 @@ func PullOneRepo(dir string) error {
 		log.Info(string(out))
 	}
 	return nil
+}
+
+func PullProjects(ctx context.Context, wg *sync.WaitGroup, projCh <-chan *gitlab.Project) {
+	wg.Add(1)
+	defer wg.Done()
+	for {
+		select {
+		case project := <-projCh:
+			dir, err := GetRepoLocalPath(project.HTTPURLToRepo)
+			if err != nil {
+				log.Error(err)
+				return
+			}
+			PullOneRepo(dir)
+		case <-ctx.Done():
+			log.Warn("cancel pull")
+			return
+		}
+	}
 }

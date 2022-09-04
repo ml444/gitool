@@ -2,6 +2,8 @@ package gitlab
 
 import (
 	"context"
+	"sync"
+
 	"github.com/manifoldco/promptui"
 	"github.com/ml444/gitool/git"
 	log "github.com/ml444/glog"
@@ -17,9 +19,11 @@ func PullAllRepo(gn int) {
 		log.Error(err)
 		return
 	}
+	var wg sync.WaitGroup
 	for i := 0; i < gn; i++ {
-		git.CloneProjects(ctx, projCh)
+		go git.PullProjects(ctx, &wg, projCh)
 	}
+	wg.Wait()
 }
 
 func PullOneRepoBySearch(repoName string) {
@@ -64,5 +68,5 @@ PULL:
 		log.Error(err)
 		return
 	}
-
+	log.Infof("pull %s completed", dir)
 }

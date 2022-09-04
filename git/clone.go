@@ -2,12 +2,14 @@ package git
 
 import (
 	"context"
+	"os"
+	"sync"
+
 	"github.com/ml444/gitool/conf"
 	log "github.com/ml444/glog"
 	"github.com/xanzy/go-gitlab"
 	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing/transport/http"
-	"os"
 )
 
 func CloneOneProject(project *gitlab.Project) {
@@ -33,13 +35,15 @@ func CloneOneProject(project *gitlab.Project) {
 		log.Info("Successfully cloned repo:", project.Name)
 	}
 }
-func CloneProjects(ctx context.Context, prjCh <-chan *gitlab.Project) {
+func CloneProjects(ctx context.Context, wg *sync.WaitGroup, prjCh <-chan *gitlab.Project) {
+	wg.Add(1)
+	defer wg.Done()
 	for {
 		select {
 		case project := <-prjCh:
 			CloneOneProject(project)
 		case <-ctx.Done():
-			log.Warnf("cancel clone repo")
+			log.Warn("cancel clone repo")
 			return
 		}
 	}
