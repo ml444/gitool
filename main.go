@@ -31,7 +31,7 @@ func main() {
 
 	}
 	if argsLen := len(os.Args); argsLen == 1 {
-		fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s <cmd:clone|pull> [options]:\n", os.Args[0])
+		fmt.Fprintf(flag.CommandLine.Output(), "<V0.1.0> Usage of %s <cmd:clone|pull> [options]:\n", os.Args[0])
 		flag.PrintDefaults()
 		return
 	} else {
@@ -78,4 +78,3 @@ func main() {
 
 	log.Info("process complete")
 }
-	
