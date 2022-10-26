@@ -16,5 +16,23 @@ export GITLAB_USERNAME=UserName
 ## Commands
 
 ```shell
-$ gitool clone -gn 10
+# clone all repo:
+$ gitool clone -all 
+
+# clone all repo by setting concurrent count
+$ gitool clone -all -C 5
+
+# clone one repo by search 
+$ gitool clone -s repo_name
+
+# >>>>pull<<<< 
+# pull all repo:
+$ gitool pull -all 
+
+# pull all repo by setting concurrent count
+$ gitool pull -all -C 5
+
+# pull one repo by search 
+$ gitool pull -s repo_name
+
 ```
