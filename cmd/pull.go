@@ -8,9 +8,10 @@ import (
 	"time"
 
 	"github.com/manifoldco/promptui"
+	log "github.com/ml444/glog"
+
 	"github.com/ml444/gitool/conf"
 	"github.com/ml444/gitool/gitlab"
-	log "github.com/ml444/glog"
 )
 
 func PullOneRepoBySearch(domain int, searchContent string) {
@@ -48,6 +49,9 @@ func PullDefaultSelectOption(gitDomain int) {
 		prompt := promptui.Prompt{
 			Label: "How much concurrency do you want <int>",
 			Validate: func(s string) error {
+				if len(s) == 0 {
+					return nil
+				}
 				goroutineCount, err = strconv.ParseInt(s, 10, 64)
 				if err != nil {
 					log.Errorf("err:%v", err)

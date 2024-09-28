@@ -4,12 +4,13 @@ go 1.17
 
 require (
 	github.com/manifoldco/promptui v0.9.0
-	github.com/ml444/glog v0.0.0-20220902194351-bf3cc2edf580
+	github.com/ml444/glog v0.4.5
 	github.com/xanzy/go-gitlab v0.72.0
 	gopkg.in/src-d/go-git.v4 v4.13.1
 )
 
 require (
+	github.com/agiledragon/gomonkey/v2 v2.12.0 // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
 	github.com/emirpasic/gods v1.12.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
@@ -19,7 +20,7 @@ require (
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/kevinburke/ssh_config v0.0.0-20190725054713-01f96b0aa0cd // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
-	github.com/petermattis/goid v0.0.0-20220824145935-af5520614cb6 // indirect
+	github.com/petermattis/goid v0.0.0-20240716203034-badd1c0974d6 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sergi/go-diff v1.0.0 // indirect
 	github.com/src-d/gcfg v1.4.0 // indirect
