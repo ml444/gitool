@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/ml444/gitool/cmd"
 	"github.com/ml444/gitool/conf"
@@ -13,6 +14,8 @@ import (
 )
 
 func main() {
+	conf.InitLogger()
+
 	var err error
 	var cmdStr string
 	var domain int
@@ -77,4 +80,5 @@ func main() {
 	}
 
 	log.Info("process complete")
+	time.Sleep(200 * time.Millisecond)
 }
